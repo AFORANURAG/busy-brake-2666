@@ -1,6 +1,6 @@
 import  Redis  from 'ioredis';
-import express from 'express';
-
+import express, { response } from 'express';
+import {MONGO_URL,SECRET_KEY} from "../secret"
 import _jsonwebtoken from "jsonwebtoken";
 
 import _bcrypt from "bcrypt";
@@ -8,7 +8,7 @@ import _bcrypt from "bcrypt";
 import UserModel from '../models/user.model';
 import { Model } from 'mongoose';
 
-let UserRouter=express.Router()
+const UserRouter=express.Router()
 
 UserRouter.get("/",async(req,res)=>{
     res.json("welcome to user router")
@@ -19,28 +19,67 @@ const redis=new Redis()
 
 
 
-UserRouter.post("/login",async(req,res)=>{
-  let {email,password} = req.body
-  let loader=await UserModel.find({email})
-
-  let hashedpassword:String|any= loader?.password
+UserRouter.post("/login",async(req,response)=>{
+  const {email,password} = req.body
+  const loader=await UserModel.find({email})
+  const hashedpassword:string|any= loader[0].password
 
   try {
     // load the hashed password
-    
+    /// here i am going to compare both hashed 
+    _bcrypt.compare(password,hashedpassword,(err,res)=>{
+      if(err) throw err
+if(res){
+// sign a token with jwt
+interface body{
+  emailId:string
+}
+
+let bodyvalue=<body>{
+  emailId:email
+}
+const accesstoken=_jsonwebtoken.sign(bodyvalue,SECRET_KEY,{expiresIn:60*60})
+const refreshtoken=_jsonwebtoken.sign(bodyvalue,SECRET_KEY,{expiresIn:60*60})
+console.log(accesstoken,refreshtoken)
+response.cookie("accessToken",accesstoken,{httpOnly:true})
+return response.status(202).json({message:"login successfull",refreshToken:refreshtoken})
+}else{
+
+ return response.status(406).json({message:"wrong credentials",suggestion:"please fill write credentials"})
+
+}
+
+    })
 
   } catch (error) {
-    
+    console.log(error)
+
+    return response.status(500).json({message:"somewent wrong",error:error})
   }  
+})
+
+// so this is basicaslly logout path
+
+UserRouter.post("/logout",async (request,response)=>{
+let accessToken=request.cookies.accessToken
+// so here we will require the token and fi the person is there 
+// let put this token in blacklist
+try {
+  await redis.lpush("blacklistedusers",accessToken)
+  console.log("pushed to redis successfully")
+  return response.status(202).json({message:"logout successfull"})
+} catch (error) {
+  console.log(error)
+  response.json({message:"something went wrong",error:error.message})
+}
+
+
 })
 
 
 UserRouter.post("/signup",async (req,res)=>{
-
-let {email,password,name,age}=req.body
-
-
-let loaddatafromdb = await UserModel.findOne({email})
+const {email,password,name,age}=req.body;
+const loaddatafromdb = await UserModel.findOne({email})
 
 try {
 if(loaddatafromdb){
@@ -48,8 +87,8 @@ return  res.json({message:"user already exists"})
 
 }else{
     // query is a instance of usermodel
-let hashedpassword:String =_bcrypt.hashSync(password,10)
-let query = new UserModel({email,password:hashedpassword,name,age})
+const hashedpassword:string =_bcrypt.hashSync(password,10)
+const query = new UserModel({email,password:hashedpassword,name,age})
 await query.save()
 
 return res.status(202).json({message:"account created successfully"})
@@ -57,7 +96,7 @@ return res.status(202).json({message:"account created successfully"})
 
 } catch (error) {
 console.log(error)
-let processError:unknown|string= error
+const processError:unknown|string= error
 res.status(500).json({message:"error in creating your account",processError})
 
 }

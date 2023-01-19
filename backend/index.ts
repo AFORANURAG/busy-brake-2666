@@ -2,14 +2,19 @@ import express from 'express';
 import dotenv from "dotenv"
 dotenv.config()
 console.log(process.env.MONGO_URL)
-
 import UserRouter from './Routes/userauth.route';
 import mongoose from 'mongoose';
+ 
+import cookieParser from 'cookie-parser';
+
+import { shortnerRouter } from './Routes/shortner.route';
 
 const app: express.Application = express()
 const  port = 8080
+app.use(cookieParser())
 app.use(express.json())
 app.use("/userauth",UserRouter)
+app.use("/shortner",shortnerRouter)
 
 console.log("i am in main file")
 
