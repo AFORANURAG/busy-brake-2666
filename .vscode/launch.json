@@ -11,7 +11,7 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}/backend/Routes/userauth.route.ts",
+            "program": "${workspaceFolder}/frontend/scr/App.tsx",
             "outFiles": [
                 "${workspaceFolder}/**/*.js"
             ]

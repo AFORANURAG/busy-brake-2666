@@ -5,13 +5,13 @@ import express, { NextFunction } from "express"
 import  {Redis}  from "ioredis";
 import jwt_decode from "jwt-decode";
 
-let redis=new Redis()
+const redis=new Redis()
 
 export const  authenticator=async (req:express.Request,res:express.Response,next:NextFunction):Promise<void>=>{
 
 console.log(req.cookies)
-    let Token=req.cookies?.accessToken
-let tokensfromredis=await redis.lrange("blacklistedusers",0,-1)
+    const Token=req.cookies?.accessToken
+const tokensfromredis=await redis.lrange("blacklistedusers",0,-1)
 console.log(tokensfromredis)
 try {
 if(tokensfromredis.includes(Token)){
@@ -22,9 +22,9 @@ else{
     interface accesstoken{
         emailId:string,
     }
- let verification=jsonwebtoken.verify(Token,SECRET_KEY)
+ const verification=jsonwebtoken.verify(Token,SECRET_KEY)
 
-let decoded=jwt_decode<accesstoken>(Token)
+const decoded=jwt_decode<accesstoken>(Token)
 
 if(decoded&&verification){
 

@@ -35,7 +35,7 @@ interface body{
   emailId:string
 }
 
-let bodyvalue=<body>{
+const bodyvalue=<body>{
   emailId:email
 }
 const accesstoken=_jsonwebtoken.sign(bodyvalue,SECRET_KEY,{expiresIn:60*60})
@@ -61,7 +61,7 @@ return response.status(202).json({message:"login successfull",refreshToken:refre
 // so this is basicaslly logout path
 
 UserRouter.post("/logout",async (request,response)=>{
-let accessToken=request.cookies.accessToken
+const accessToken=request.cookies.accessToken
 // so here we will require the token and fi the person is there 
 // let put this token in blacklist
 try {
@@ -100,8 +100,6 @@ const processError:unknown|string= error
 res.status(500).json({message:"error in creating your account",processError})
 
 }
-
-
 })
 
 
