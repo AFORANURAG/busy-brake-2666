@@ -1,14 +1,54 @@
 import  Redis  from 'ioredis';
-import express, { response } from 'express';
+import express, { request, response } from 'express';
 import {MONGO_URL,SECRET_KEY} from "../secret"
 import _jsonwebtoken from "jsonwebtoken";
 
 import _bcrypt from "bcrypt";
+// import express from "express"
 
 import UserModel from '../models/user.model';
 import { Model } from 'mongoose';
-
+const passport=require("passport")
 const UserRouter=express.Router()
+
+UserRouter.get("/login/failed",(req:express.Request ,res:express.Response)=>{
+res.status(401).json({
+  success:false,
+  message:"failure"
+})
+  // 
+})
+
+
+UserRouter.get("/login/success",(req:express.Request ,res:express.Response)=>{
+  if(req.user){
+    res.status(401).json({
+      success:true,
+      message:"successfull",
+      user:req.user
+    })
+  }
+
+    // 
+  })
+
+
+
+UserRouter.get("/google",passport.authenticate("google",{scope:["profile"]}))
+
+UserRouter.get("/github",passport.authenticate("github",{scope:["profile"]}))
+
+
+UserRouter.get("/github/callback",passport.authenticate("github",{
+  successRedirect:"http://localhost:5173/",
+  failureRedirect:"http://localhost:5173/userauth/login/failed"
+  }))
+
+
+UserRouter.get("/google/callback",passport.authenticate("google",{
+successRedirect:"http://localhost:5173/",
+failureRedirect:"http://localhost:5173/userauth/login/failed"
+}))
 
 UserRouter.get("/",async(req,res)=>{
     res.json("welcome to user router")
