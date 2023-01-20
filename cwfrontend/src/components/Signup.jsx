@@ -14,12 +14,24 @@ import {
   useColorModeValue,
   Link,
 } from '@chakra-ui/react';
+import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 
-export default function SignupCard() {
+export default function Signup({onopen,show,setShow}) {
   const [showPassword, setShowPassword] = useState(false);
-
+let navigate=useNavigate()
+  function sendtologin(){
+     setShow(false) 
+    onopen()
+// navigate("#login")
+}
+const google=()=>{
+  window.open("http://localhost:8080/userauth/google")
+}
+const github=()=>{
+  window.open("http://localhost:8080/userauth/github")
+}
   return (
     <Flex
       minH={'100vh'}
@@ -85,9 +97,37 @@ export default function SignupCard() {
                 }}>
                 Sign up
               </Button>
+              <Button
+              loadingText="Submitting"
+              onClick={github}
+              size="lg"
+              bg={'black'}
+              color={'white'}
+              _hover={{
+                bg: 'green',
+              }}>
+              Continue With Github
+            </Button>
+
+            <Button
+            onClick={google}
+                loadingText="Submitting"
+                size="lg"
+                bg={'white'}
+                color={'black'}
+                _hover={{
+                  bg: 'green',
+                }}
+               border={"1px"}
+                >
+                <img src="https://blog.hubspot.com/hubfs/image8-2.jpg"  width={"50px"} alt="" srcset="" />
+               Continue with Google
+              </Button>
+
+
             </Stack>
             <Stack pt={6}>
-              <Text align={'center'}>
+              <Text align={'center'} onClick={sendtologin}>
                 Already a user? <Link color={'blue.400'}>Login</Link>
               </Text>
             </Stack>

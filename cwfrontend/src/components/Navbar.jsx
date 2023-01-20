@@ -1,9 +1,13 @@
-import React from 'react';
+import React,{useState} from 'react';
 import { Link as routerLink } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
+// import React, { useState } from 'react';
+// import {Button as Rbutton} from 'react-bootstrap/Button';
+import Offcanvas from 'react-bootstrap/Offcanvas';
+
 // import anurag-upadhyay-modified from "
 import {
   Box,
@@ -35,7 +39,7 @@ import {
   Image
 } from '@chakra-ui/react'
 import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
-import SignupCard from './Signup';
+import Signup from './Signup';
 import Logindrawer from './Logindrawer';
 import { useRef } from 'react';
 const sizes = ['xs', 'sm', 'md', 'lg', 'xl', 'full']
@@ -56,11 +60,15 @@ const NavLink = ({ children }) => (
   </Link>
 );
 
-export default function Simple() {
+export default function Navigationbar() {
   const { isOpen, onOpen, onClose } = useDisclosure()
   // my projects is my identity;
   const btnRef = React.useRef()
-  const btnRef1=useRef()
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+  // const btnRef1=useRef()
   // const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
@@ -89,56 +97,27 @@ export default function Simple() {
           </NavDropdown>
         </Nav>
         <Nav>
-          <Nav.Link href="#Login">
+         
           
-          <Button key={"kldjsajd"} variant={"outline"} _hover={{backgroundColor:"white",color:"black"}} color={"whiteAlpha"} bg={"blackAlpha.100"} ref={btnRef}  onClick={onOpen}> Login</Button>
+          <Button key={"kldjsajd"} variant={"outline"} _hover={{backgroundColor:"white",color:"black"}} color={"white"} mr={10} bg={"blackAlpha.100"} ref={btnRef}  onClick={onOpen}> Login</Button>
           
-          </Nav.Link>
-          <Nav.Link eventKey={2} href="#Signup">
-          <Button key={"jklasjdk"} ref={btnRef1} variant={"outline"} _hover={{backgroundColor:"white",color:"black"}} color={"whiteAlpha"} bg={"blackAlpha.100"} onClick={onOpen}> Signup </Button>
-
-          </Nav.Link>
+          
+          <Button variant={"outline"} _hover={{backgroundColor:"white",color:"black"}} color={"white"} bg={"blackAlpha.100"} mr={10} onClick={handleShow}>
+          Launch
+        </Button>
+  
         </Nav>
       </Navbar.Collapse>
     </Container>
   </Navbar>
-      <>
      
+ <>   
  
-
-<Drawer size={"md"}
-        isOpen={isOpen}
-        placement='right'
-        onClose={onClose}
-        finalFocusRef={btnRef}
-      >
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
-          <DrawerHeader>Create your account</DrawerHeader>
-
-          <DrawerBody>
-<SignupCard/>
-          </DrawerBody>
-          <DrawerFooter>
-            <Button variant='outline' mr={3} onClick={onClose}>
-              Cancel
-            </Button>
-            <Button colorScheme='blue'>Save</Button>
-          </DrawerFooter>
-        </DrawerContent>
-      </Drawer>
-    </>
-
-    <>
-     
- 
-
     <Drawer size={"md"}
             isOpen={isOpen}
             placement='right'
             onClose={onClose}
-            finalFocusRef={btnRef1}
+            finalFocusRef={btnRef}
           >
             <DrawerOverlay />
             <DrawerContent>
@@ -156,8 +135,22 @@ export default function Simple() {
               </DrawerFooter>
             </DrawerContent>
           </Drawer>
-        </>
-
+</> 
+<>
+      
+      <Offcanvas show={show} onHide={handleClose}>
+        <Offcanvas.Header closeButton>
+          <Offcanvas.Title>Offcanvas</Offcanvas.Title>
+        </Offcanvas.Header>
+        <Offcanvas.Body>
+          <Signup onopen={onOpen} show={show} setShow={setShow}/>
+        </Offcanvas.Body>
+      </Offcanvas>
     </>
+
+
+</>
+
+    
   );
 }
