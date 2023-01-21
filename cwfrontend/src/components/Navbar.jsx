@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useState,createContext} from 'react';
 import { Link as routerLink } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
@@ -7,6 +7,7 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 // import React, { useState } from 'react';
 // import {Button as Rbutton} from 'react-bootstrap/Button';
 import Offcanvas from 'react-bootstrap/Offcanvas';
+const AppContext=createContext()
 
 // import anurag-upadhyay-modified from "
 import {
@@ -103,7 +104,7 @@ export default function Navigationbar() {
           
           
           <Button variant={"outline"} _hover={{backgroundColor:"white",color:"black"}} color={"white"} bg={"blackAlpha.100"} mr={10} onClick={handleShow}>
-          Launch
+        Sign Up
         </Button>
   
         </Nav>
