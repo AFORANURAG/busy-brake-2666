@@ -162,7 +162,6 @@ headers:{
                 }}
                border={"1px"}
                 >
-                <img src="https://blog.hubspot.com/hubfs/image8-2.jpg"  width={"50px"} alt="" srcset="" />
                Continue with Google
               </Button>
 

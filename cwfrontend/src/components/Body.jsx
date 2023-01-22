@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import React,{useState,} from 'react'
 import { Box,Flex,Button} from '@chakra-ui/react'
 import {
     FormControl,
@@ -11,9 +11,25 @@ import {
   } from '@chakra-ui/react'
   import Offcanvas from 'react-bootstrap/Offcanvas';
   import Signup from './Signup';
-
+import { useEffect } from 'react';
 import { useDisclosure } from '@chakra-ui/react'
 export default function Body() {
+  let [refreshToken,setRefreshToken]=useState("")
+  useEffect(()=>{
+setRefreshToken(localStorage.getItem("refreshToken"))
+  },[])
+  console.log(refreshToken)
+  const [isauthenticated,setAuthenticated]=useState(false)
+
+useEffect(()=>{
+   ()=>{
+if(refreshToken){
+setAuthenticated(true)
+}else{
+  setAuthenticated(false)
+}
+  }
+},[refreshToken])
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [show, setShow] = useState(false);
 
@@ -22,7 +38,7 @@ export default function Body() {
 
   return (
     <Flex flexWrap={'nowrap'} w={"100%"} h={"700px"} pt={10} bg={"black"} id='body' >
-    <Box w={"30%"}  h={"50%"} ml={10}  border={"1px solid black"}>
+    <Box w={"30%"}  h={"max-content"} ml={10}  border={"1px solid black"}>
   
     <FormControl>
     <FormLabel>Enter Url</FormLabel>
@@ -30,34 +46,36 @@ export default function Body() {
     
     <FormLabel>Customize Your Link</FormLabel>
     <Select  color={"black"} placeholder='customized your link'>
-      <option>shor8ner.com</option>
-      <option>tinyurl.com</option>
-      <option>library.com</option>
+      <option>md-5</option>
+      <option>sha-512 </option>
+      <option>sha-256 </option>
 </Select>
 
-<FormLabel>Choose Algorithm</FormLabel>
+<FormLabel>Short Url</FormLabel>
 <Select  color={"black"} placeholder='algorithm'>
 <option>shor8ner.com</option>
 <option>tinyurl.com</option>
 <option>library.com</option>
 
-  </Select>
+</Select>
+
+<Button variant={"ghost"} bg={"black"} mt={5} ml={"40%"} _hover={{bg:"white",color:"black"}}> Short It </Button>
+
 <Flex style={{justifyContent:"center"}} mt={"10px"}>
-<Button variant={"ghost"} bg={"black"} ml={4} _hover={{bg:"white",color:"black"}}>visit url</Button>
+<Button variant={"ghost"} bg={"black"} ml={4} _hover={{bg:"white",color:"black"}}> visit url </Button>
 <Button variant={"ghost"} bg={"black"} ml={4} _hover={{bg:"white",color:"black"}}> Email </Button> 
-<Button variant={"ghost"} bg={"black"} ml={4} mr={5} _hover={{bg:"white",color:"black"}}> QR</Button>
+<Button variant={"ghost"} bg={"black"} ml={4} mr={5} _hover={{bg:"white",color:"black"}}> QR </Button>
 </Flex>
 
 <Flex style={{justifyContent:"center"}} mt={"10px"} >
-<Button variant={"ghost"} bg={"black"} ml={10} _hover={{bg:"white",color:"black"}}>Share</Button>
-<Button variant={"ghost"} bg={"black"} ml={10} mr={12} _hover={{bg:"white",color:"black"}}>Copy</Button>
+<Button variant={"ghost"} bg={"black"} ml={"16%"} mr={12} _hover={{bg:"white",color:"black"}}>Copy</Button>
 </Flex>
 
 
   </FormControl>
     
     </Box>
-    <Box w={"30%"}  h={"50%"} ml={10}  border={"1px solid black"}>
+    <Box w={"30%"}  display={isauthenticated?"block":"none"} h={"50%"} ml={10}  border={"1px solid black"}>
    <h2>Welcome to Shor8ner</h2> 
    <h3>   Create a free account to enjoy:
    </h3>
@@ -69,7 +87,7 @@ export default function Body() {
    <br />
    &#10003;<span> You Will Get more benefits as compare to any other url shortening website.</span>
 
-   <Button variant={"outline"} ml={"15%"} mt={5} _hover={{backgroundColor:"white",color:"black"}} color={"white"} bg={"blackAlpha.100"} mr={10} onClick={handleShow}>
+   <Button variant={"outline"} display={isauthenticated?"block":"none"} ml={"15%"} mt={5} _hover={{backgroundColor:"white",color:"black"}} color={"white"} bg={"blackAlpha.100"} mr={10} onClick={handleShow}>
  Create a free account today
    </Button>
 
@@ -87,8 +105,6 @@ export default function Body() {
       </Offcanvas.Body>
     </Offcanvas>
   </>
-
-
-    </Flex>
+ </Flex>
   )
 }
