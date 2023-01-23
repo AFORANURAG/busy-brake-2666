@@ -114,12 +114,7 @@ setAuthenticated(true)
  const logout=async ()=>{
 console.log("logout button is clicked");
 localStorage.setItem("logged","out")
-let res=await fetch("http://localhost:8080/userauth/logout",{
-  method:"POST",
-  headers:{
-"Content-Type":"application/json"
-  }
-})
+
 window.location.reload()
 
 }
