@@ -50,8 +50,8 @@ let short=req.body.shortedurl;
 try {
 let loadeddata=await  ShortnerModel.findOne({short:short})
 let longurl=loadeddata.full
-console.log(loadeddata,longurl)
-return res.status(301).redirect(longurl)
+console.log(longurl)
+res.redirect(301,longurl)
 } catch (error) {
  console.log(error)
  res.json({message:"error in redirecting",error:error.message})   
