@@ -13,13 +13,14 @@ import cookieParser from 'cookie-parser';
 import cors from "cors"
 import { shortnerRouter } from './Routes/shortner.route';
 import "./passport"
+import { ShortnerModel } from './models/shorturl.model';
 
 const app: express.Application = express()
 const  port = 8080
+
 app.use(cors({
-   origin:"http://localhost:5173",
-   credentials:true 
-}))
+    origin:"*"
+   }))
 app.use(cookieSession({
 name:"session",
 keys:["hello"],
@@ -38,6 +39,23 @@ console.log("i am in main file")
 
 app.get("/",(_req,res):void=>{
 res.json({message:"anurag"})
+
+})
+
+
+app.post("/hash",async(req,res)=>{
+console.log("hello")
+let short=req.body.shortedurl;
+// console.log(short)
+try {
+let loadeddata=await  ShortnerModel.findOne({short:short})
+let longurl=loadeddata.full
+console.log(loadeddata,longurl)
+return res.status(301).redirect(longurl)
+} catch (error) {
+ console.log(error)
+ res.json({message:"error in redirecting",error:error.message})   
+}
 
 })
 
