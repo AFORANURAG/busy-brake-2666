@@ -4,7 +4,7 @@ import { Textarea } from '@chakra-ui/react'
 import Modal from 'react-bootstrap/Modal';
 // import QRCode from "react-qr-code";
 import QRCode from "qrcode";
-
+// import
 
 import {
 
@@ -100,18 +100,18 @@ const emailopen=()=>{
 const visit=async ()=>{
   let shortedurl=shorturl
   let obj={shortedurl}
-  console.log(shorturl)
-// let res= await fetch(`http://localhost:8080/shortner/hash`,{
-//   method:"POST",
-//   body:JSON.stringify(obj),
-//   headers:{
-//     "Content-Type":"application/json"
-//   }
-  
-// })
-// let data=await res.json()
-// console.log(data)
-window.location.href=longurl
+  // console.log(shorturl)
+let res= await fetch(`http://localhost:8080/hash`,{
+  method:"POST",
+  body:JSON.stringify(obj),
+  headers:{
+    "Content-Type":"application/json",
+    "Access-Control-Allow-Origin": "*"  
+  },
+  mode:"no-cors",
+})
+
+
 }
 const copy=()=>{
 
