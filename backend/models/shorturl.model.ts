@@ -1,4 +1,4 @@
-import mongoose from "mongoose"
+import mongoose, { model } from "mongoose"
 interface shortUrl{
 full:string,
 short:string,
@@ -16,9 +16,15 @@ short:{
     type:String,
     required:true
 },
-click:{
+initiallength:{
+    type:Number,
+    required:true
+},
+finallength:{
     type:Number,
     required:true
 },
 
 })
+const ShortnerModel=model<shortUrl>("url",shorturlSchema);
+export {ShortnerModel}
