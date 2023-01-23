@@ -41,10 +41,6 @@ res.json({message:"anurag"})
 
 })
 
-
-
-
-
 app.listen(port,async () =>{
     
 try {
@@ -53,6 +49,6 @@ try {
 console.log("connected to db successfully")   
 } catch (error) {
     console.log(error)
-   } 
+} 
 console.log("listening on port 8080")
 })

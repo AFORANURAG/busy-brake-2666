@@ -5,14 +5,16 @@ import express, { NextFunction } from "express"
 import  {Redis}  from "ioredis";
 import jwt_decode from "jwt-decode";
 
+
 const redis=new Redis()
 
 export const  authenticator=async (req:express.Request,res:express.Response,next:NextFunction):Promise<void>=>{
-
 console.log(req.cookies)
-    const Token=req.cookies?.accessToken
+    const Token=req.cookies?.accessToken||req.headers?.authorization;
+
+
 const tokensfromredis=await redis.lrange("blacklistedusers",0,-1)
-console.log(tokensfromredis)
+console.log(Token)
 try {
 if(tokensfromredis.includes(Token)){
 res.json({message:"You are logged out please login again"})

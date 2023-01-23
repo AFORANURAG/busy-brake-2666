@@ -20,16 +20,20 @@ res.status(401).json({
 })
 
 
-UserRouter.get("/login/success",(req:express.Request ,res:express.Response)=>{
+UserRouter.get("/login/success",async (req:express.Request ,res:express.Response)=>{
+ console.log("hello")
+  console.log(req.user)
+  
   if(req.user){
-    res.status(401).json({
+    
+      res.status(401).json({ 
       success:true,
       message:"successfull",
       user:req.user
     })
   }
 
-    // 
+   
   })
 
 
@@ -61,14 +65,18 @@ const redis=new Redis()
 
 UserRouter.post("/login",async(req,response)=>{
   const {email,password} = req.body
+  console.log(email,password)
   const loader=await UserModel.find({email})
-  const hashedpassword:string|any= loader[0].password
+  const hashedpassword:string|any= loader[0]?.password
+  const name=loader[0]?.name;
+if(!hashedpassword) return response.status(401).json({message:"you are not signed up , please signup to login"})
 
   try {
     // load the hashed password
     /// here i am going to compare both hashed 
+
     _bcrypt.compare(password,hashedpassword,(err,res)=>{
-      if(err) throw err
+if(err) throw err
 if(res){
 // sign a token with jwt
 interface body{
@@ -81,8 +89,10 @@ const bodyvalue=<body>{
 const accesstoken=_jsonwebtoken.sign(bodyvalue,SECRET_KEY,{expiresIn:60*60})
 const refreshtoken=_jsonwebtoken.sign(bodyvalue,SECRET_KEY,{expiresIn:60*60})
 console.log(accesstoken,refreshtoken)
-response.cookie("accessToken",accesstoken,{httpOnly:true})
-return response.status(202).json({message:"login successfull",refreshToken:refreshtoken})
+response.cookie("accessToken",accesstoken,{
+httpOnly:true
+})
+return response.status(202).json({message:"login successfull",refreshToken:refreshtoken,accesstoken:accesstoken,name:name})
 }else{
 
  return response.status(406).json({message:"wrong credentials",suggestion:"please fill write credentials"})
@@ -102,6 +112,7 @@ return response.status(202).json({message:"login successfull",refreshToken:refre
 
 UserRouter.post("/logout",async (request,response)=>{
 const accessToken=request.cookies.accessToken
+console.log(accessToken)
 // so here we will require the token and fi the person is there 
 // let put this token in blacklist
 try {
