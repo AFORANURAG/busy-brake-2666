@@ -63,9 +63,6 @@ return res.json({message:"url shorted successfully",shortedurl:short})
     
     })
 
-
-    
-
     shortnerRouter.post("/longurl/sha256",async (req,res)=>{
         let full=req.body.longurl;
         let domain=req.body.custimization;
@@ -132,17 +129,13 @@ try {
     let loadeddata=await  ShortnerModel.findOne({short:short})
     let longurl=loadeddata.full
     console.log(loadeddata,longurl)
-   res.redirect("http://localhost:5173/")
+   res.redirect(longurl)
 } catch (error) {
  console.log(error)
  res.json({message:"error in redirecting",error:error.message})   
 }
 
 })
-
-
-
-
 
 
 

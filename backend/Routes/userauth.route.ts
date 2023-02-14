@@ -45,8 +45,9 @@ UserRouter.get("/github",passport.authenticate("github",{scope:["profile"]}))
 
 UserRouter.get("/github/callback",passport.authenticate("github",{
   successRedirect:"http://localhost:5173/",
-  failureRedirect:"http://localhost:5173/userauth/login/failed"
+  failureRedirect:"www.google.com"
   }))
+
 
 
 UserRouter.get("/google/callback",passport.authenticate("google",{

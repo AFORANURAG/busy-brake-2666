@@ -12,14 +12,15 @@ import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
 import cors from "cors"
 import { shortnerRouter } from './Routes/shortner.route';
-import "./passport"
+import "./passport" ;
+import { ShortnerModel } from './models/shorturl.model';
 
 const app: express.Application = express()
 const  port = 8080
+
 app.use(cors({
-   origin:"http://localhost:5173",
-   credentials:true 
-}))
+    origin:"*"
+   }))
 app.use(cookieSession({
 name:"session",
 keys:["hello"],
@@ -38,6 +39,23 @@ console.log("i am in main file")
 
 app.get("/",(_req,res):void=>{
 res.json({message:"anurag"})
+
+})
+
+
+app.post("/hash",async(req,res)=>{
+console.log("hello")
+const  short=req.body.shortedurl;
+console.log(req.body)
+try {
+const  loadeddata=await  ShortnerModel.findOne({short:short})
+const  longurl=loadeddata?.full
+console.log(longurl)
+res.redirect(longurl)
+} catch (error) {
+    console.log(error)
+    res.json({message:"error in redirecting",error:error.message})   
+}
 
 })
 
