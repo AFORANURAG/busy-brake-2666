@@ -12,7 +12,7 @@ import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
 import cors from "cors"
 import { shortnerRouter } from './Routes/shortner.route';
-import "./passport"
+import "./passport" ;
 import { ShortnerModel } from './models/shorturl.model';
 
 const app: express.Application = express()
@@ -45,16 +45,16 @@ res.json({message:"anurag"})
 
 app.post("/hash",async(req,res)=>{
 console.log("hello")
-let short=req.body.shortedurl;
-// console.log(short)
+const  short=req.body.shortedurl;
+console.log(req.body)
 try {
-let loadeddata=await  ShortnerModel.findOne({short:short})
-let longurl=loadeddata.full
+const  loadeddata=await  ShortnerModel.findOne({short:short})
+const  longurl=loadeddata?.full
 console.log(longurl)
-res.redirect(301,longurl)
+res.redirect(longurl)
 } catch (error) {
- console.log(error)
- res.json({message:"error in redirecting",error:error.message})   
+    console.log(error)
+    res.json({message:"error in redirecting",error:error.message})   
 }
 
 })
